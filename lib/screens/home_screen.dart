@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   const CalendarWidget(),
-                  TransactionList(), // Ваш виджет списка транзакций
+                  //TransactionList(), // Ваш виджет списка транзакций
                 ],
               ),
             ),

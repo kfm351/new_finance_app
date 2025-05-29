@@ -93,17 +93,26 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 return Column(
                   children: [
                     Text(
-                      'Доход за ${_selectedDay?.toString() ?? ''}',
+                      'Транзакции за ${_selectedDay?.day}-${_selectedDay?.month}-${_selectedDay?.year}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    ...transactions.map((t) => ListTile(
-                          title: Text(t.category),
-                          trailing: Text('+${t.amount.toStringAsFixed(2)} ₽'),
-                          subtitle: Text(t.notes ?? ''),
-                        )),
+                    ...transactions.map((t) {
+                      final sign = t.type == 'income' ? '+' : '-';
+                      return ListTile(
+                        title: Text(t.category),
+                        trailing: Text('$sign${t.amount.toStringAsFixed(2)} ₽'),
+                        subtitle: Text(t.notes ?? ''),
+                      );
+                    }),
                     ElevatedButton(
-                      onPressed: () => _addTransaction(context, _selectedDay!),
+                      onPressed: () =>
+                          _addTransaction(context, _selectedDay!, 'income'),
                       child: const Text('Добавить доход'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () =>
+                          _addTransaction(context, _selectedDay!, 'expense'),
+                      child: const Text('Добавить расход'),
                     ),
                   ],
                 );
@@ -125,16 +134,23 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     return result;
   }
 
-  Future<void> _addTransaction(BuildContext context, DateTime date) async {
+  Future<void> _addTransaction(
+      BuildContext context, DateTime date, String type) async {
     // Реализуем диалог добавления транзакции
     final amountController = TextEditingController();
     final categoryController = TextEditingController(text: 'Уроки');
     final notesController = TextEditingController();
+    String word = '?';
 
+    if (type == 'income') {
+      word = 'доход';
+    } else if (type == 'expense') {
+      word = 'расход';
+    }
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Добавить доход'),
+        title: Text('Добавить $word'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -161,7 +177,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           ElevatedButton(
             onPressed: () async {
               final transaction = Transaction(
-                type: 'income',
+                type: type,
                 amount: double.parse(amountController.text),
                 category: categoryController.text,
                 date: date,
