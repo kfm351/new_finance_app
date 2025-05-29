@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_finance_helper/services/database.dart';
 import 'package:personal_finance_helper/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:personal_finance_helper/screens/auth_screen.dart';
@@ -13,6 +14,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
+        Provider(create: (_) => DatabaseHelper()),
       ],
       child: MyApp(), // Убрал const здесь
     ),

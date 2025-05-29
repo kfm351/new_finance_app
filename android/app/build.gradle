@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.new_finance_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35 //flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -19,12 +19,15 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
-    compileSdkVersion 34
+    compileSdkVersion 35 //34
     ndkVersion "27.0.12077973"
     
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 34
+        applicationId "com.example.new_finance_app"
+        versionCode 1
+        versionName "1.0.0"
     }
 
     buildTypes {
